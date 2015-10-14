@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Where no Dog has gone before</title>
+    <meta charset="utf-8" />
+    <style>
+    body
+    {
+        background-color: black;
+    }
+
+    audio
+    {
+        display: none;
+    }
+
+    #grid
+    {
+        position: absolute;
+
+        width: 1217px;
+
+        bottom: 20%;
+        left: calc((100% - 1217px)/2);
+    }
+
+    #dialogbox
+    {
+        position: absolute;
+        bottom: 5px;
+
+        width: 739px;
+        left: calc((100% - 739px)/2);
+
+        background-color: black;
+
+        z-index: 10;
+    }
+
+    #dialog
+    {
+        position: absolute;
+        top: 20px;
+        left: 15px;
+    }
+
+    #dialog img
+    {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+
+    #dialogPet
+    {
+        display: none;
+        cursor: pointer;
+    }
+
+    #dialogPet.petMore
+    {
+        filter: blur(1px);
+    }
+
+    #dialogPet.petSomeMore
+    {
+        filter: blur(5px);
+    }
+
+    #dialogPet.petEvenMore
+    {
+        filter: blur(10px);
+    }
+
+    #dialogPet.petTooMuch
+    {
+        filter: blur(20px);
+    }
+
+    #dialogProblem
+    {
+        display: none;
+    }
+
+    #progress
+    {
+        position: absolute;
+        bottom: calc(20% + 220px);
+        left: calc((100% + 250px)/2);
+
+        font-family: "Courier New", Courier, monospace;
+        color: white;
+        font-weight: bold;
+
+        height: 400px;
+        width: 80px;
+    }
+
+    #progressBottom
+    {
+        position: absolute;
+        bottom: 0px;
+    }
+
+    #progressTop
+    {
+        position: absolute;
+        top: 0px;
+    }
+
+    #progressCurrent
+    {
+        position: absolute;
+        bottom: 0%;
+    }
+
+    #progressCurrentValue
+    {
+        display: none;
+    }
+
+    #otherProgressCurrent
+    {
+        position: absolute;
+        width: 80px;
+        display: none;
+
+        font-family: "Courier New", Courier, monospace;
+        color: white;
+        font-weight: bold;
+    }
+
+    #dog
+    {
+        position: absolute;
+
+        width: 220px;
+
+        bottom: 20%;
+        left: calc((100% - 220px)/2);
+    }
+
+    #head
+    {
+        position: absolute;
+        top: 78px;
+        left: 92px;
+
+        width: 78px;
+    }
+
+    #otherHead
+    {
+        display: none;
+
+        position: absolute;
+        width: 78px;
+    }
+
+    #neck
+    {
+        left: 90px;
+        top: 106px;
+    }
+
+    #otherNeck
+    {
+        display: none;
+    }
+
+    .neck
+    {
+        position: absolute;
+        width: 76px;
+        height: 0px;
+
+        background-image: url("neck.png");
+    }
+    </style>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script>
+    "use strict";
+    $(function () {
+        var currentProgress = 0
+
+        function random(min, max)
+        {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+
+        function raiseHead(by)
+        {
+            $("#head").css("top", "-=" + by);
+            $("#neck").css("height", "+=" + by).css("top", "-=" + by);
+            $("#progressCurrent").css("bottom", "+=" + by);
+        }
+
+        function lowerHead(by)
+        {
+            $("#otherHead").css("top", "+=" + by);
+            $("#otherNeck").css("height", "+=" + by);
+            $("#otherProgressCurrent").css("top", "+=" + by);
+        }
+
+        function getProgress()
+        {
+            var progress = 78 - parseInt($("#head").css("top"), 10);
+            var progressP = (progress*100)/382;
+            
+            $("#progressCurrentValue").text(Math.round(progressP) + "%");
+
+            return progressP;
+        }
+
+        function loading()
+        {
+            raiseHead(1);
+            var progressP = getProgress();
+
+            if(progressP > 3 && $("#progressCurrentValue:not(visible)").length > 0)
+               $("#progressCurrentValue").show();
+
+            if(progressP > 98 && $("#progressCurrentValue:visible").length > 0)
+               $("#progressCurrentValue").hide();
+
+            if(progressP < 100)
+            {
+                window.setTimeout(loading, random(10, 50));
+            }
+            else
+            {
+                $("#dialogAppears").fadeOut();
+
+                window.setTimeout(function(){
+                    $("#dialogPet").fadeIn();
+
+                    $("#dialogPet").click(pet);
+                }, 2000);
+            }
+        }
+
+        function pet()
+        {
+            raiseHead(10);
+            var progressP = getProgress();
+            $("#progressCurrentValue:not(visible)").show();
+
+            if($("#dialogPet").hasClass("startPetting"))
+            {
+                $("#dialogPet").removeClass("startPetting");
+                $("#dialogPet").addClass("petMore");
+            }
+            else if($("#dialogPet").hasClass("petMore"))
+            {
+                $("#dialogPet").removeClass("petMore");
+                $("#dialogPet").addClass("petSomeMore");
+            }
+            else if($("#dialogPet").hasClass("petSomeMore"))
+            {
+                $("#dialogPet").removeClass("petSomeMore");
+                $("#dialogPet").addClass("petEvenMore");
+            }
+            else if($("#dialogPet").hasClass("petEvenMore"))
+            {
+                $("#dialogPet").removeClass("petEvenMore");
+                $("#dialogPet").addClass("petTooMuch");
+            }
+            else if($("#dialogPet").hasClass("petTooMuch"))
+            {
+                $("#dialogPet").fadeOut();
+
+                window.setTimeout(function(){
+                    $("#music").get(0).play();
+                    neverStop();
+                });
+            }
+        }
+
+        function neverStop()
+        {
+            raiseHead(5);
+            getProgress();
+
+            var currentPos = $("#head").offset()["top"];
+            if(currentPos > -85)
+            {
+                window.setTimeout(neverStop, 50);
+            }
+            else
+            {
+                $("#otherHead").show();
+                $("#otherHead img").css("transform", "rotate(180deg)");
+                $("#otherHead").css("top", -85).css("left", "55%");
+
+                $("#otherNeck").show();
+                $("#otherNeck").css("top", -45).css("left", "55%");
+
+                $("#otherProgressCurrent").show();
+                $("#otherProgressCurrent").css("top", -45).css("left", "58%").css("transform", "rotate(180deg)");
+
+                currentProgress = 1200;
+                neverStopDown();
+            }
+        }
+
+        function neverStopDown()
+        {
+            lowerHead(5);
+            currentProgress += 5;
+            $("#otherProgressCurrentValue").text(Math.round(currentProgress/10) + "%");
+
+            if(currentProgress >= 1500 && $("#dialogProblem:visible").length == 0)
+                $("#dialogProblem").fadeIn();
+
+            window.setTimeout(neverStopDown, 50);
+        }
+
+        window.setTimeout(loading, 1500);
+    });
+    </script>
+</head>
+<body>
+    <div id="grid">
+        <img src="grid.png" alt="A grided background">
+    </div>
+
+    <div id="dog">
+        <div class="neck" id="neck">
+        </div>
+        <div id="head">
+            <img src="head.png" alt="A lesser dog's head">
+        </div>
+        <div id="body">
+            <img src="body.png" alt="A lesser dog's body">
+        </div>
+    </div>
+
+    <div id="moreDog">
+        <div class="neck" id="otherNeck">
+        </div>
+        <div id="otherHead">
+            <img src="head.png" alt="Another lesser dog's head???">
+        </div>
+    </div>
+
+    <div id="dialogbox">
+        <img src="dialogbox.png" alt="A dialog box">
+        <div id="dialog">
+            <img id="dialogAppears" src="appears.png" alt="Lesser Dog Loading Bar appears">
+            <img id="dialogPet" src="pet.png" alt="Click to pet" class="startPetting">
+            <img id="dialogProblem" src="problem.png" alt="It's possible that you may have a problem">
+        </div>
+    </div>
+
+    <div id="progress">
+        <div id="progressTop">
+            <span>- 100%</span>
+        </div>
+        <div id="progressCurrent">
+            <span>- <span id="progressCurrentValue">0%</span></span>
+        </div>
+        <div id="progressBottom">
+            <span>- 0%</span>
+        </div>
+    </div>
+
+    <div id="otherProgressCurrent">
+        <span><span id="otherProgressCurrentValue">0%</span> -</span>
+    </div>
+
+    <audio id="music" loop>
+        <source src="./dogsong.ogg" type="audio/ogg">
+        <source src="./dogsong.mp3" type="audio/mpeg">
+    </audio>
+</body>
+</html>
+<!-- I'VE BEEN PET! -->
