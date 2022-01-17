@@ -1,0 +1,172 @@
+body
+{
+    background-color: black;
+}
+
+audio
+{
+    display: none;
+}
+
+#grid
+{
+    position: absolute;
+
+    width: 1217px;
+
+    bottom: 20%;
+    left: calc((100% - 1217px)/2);
+}
+
+#dialogbox
+{
+    position: absolute;
+    bottom: 5px;
+
+    width: 739px;
+    left: calc((100% - 739px)/2);
+
+    background-color: black;
+
+    z-index: 10;
+}
+
+#dialog
+{
+    position: absolute;
+    top: 20px;
+    left: 15px;
+}
+
+#dialog img
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+#dialogPet
+{
+    display: none;
+    cursor: pointer;
+}
+
+#dialogPet.petMore
+{
+    filter: blur(1px);
+}
+
+#dialogPet.petSomeMore
+{
+    filter: blur(5px);
+}
+
+#dialogPet.petEvenMore
+{
+    filter: blur(10px);
+}
+
+#dialogPet.petTooMuch
+{
+    filter: blur(20px);
+}
+
+#dialogProblem
+{
+    display: none;
+}
+
+#progress
+{
+    position: absolute;
+    bottom: calc(20% + 220px);
+    left: calc((100% + 250px)/2);
+
+    font-family: "Courier New", Courier, monospace;
+    color: white;
+    font-weight: bold;
+
+    height: 400px;
+    width: 80px;
+}
+
+#progressBottom
+{
+    position: absolute;
+    bottom: 0px;
+}
+
+#progressTop
+{
+    position: absolute;
+    top: 0px;
+}
+
+#progressCurrent
+{
+    position: absolute;
+    bottom: 0%;
+}
+
+#progressCurrentValue
+{
+    display: none;
+}
+
+#otherProgressCurrent
+{
+    position: absolute;
+    width: 80px;
+    display: none;
+
+    font-family: "Courier New", Courier, monospace;
+    color: white;
+    font-weight: bold;
+}
+
+#dog
+{
+    position: absolute;
+
+    width: 220px;
+
+    bottom: 20%;
+    left: calc((100% - 220px)/2);
+}
+
+#head
+{
+    position: absolute;
+    top: 78px;
+    left: 92px;
+
+    width: 78px;
+}
+
+#otherHead
+{
+    display: none;
+
+    position: absolute;
+    width: 78px;
+}
+
+#neck
+{
+    left: 90px;
+    top: 106px;
+}
+
+#otherNeck
+{
+    display: none;
+}
+
+.neck
+{
+    position: absolute;
+    width: 76px;
+    height: 0px;
+
+    background-image: url("neck.png");
+}
